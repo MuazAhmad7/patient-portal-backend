@@ -9,7 +9,7 @@ export class AIAgentService {
   private baseUrl: string;
 
   constructor(private configService: ConfigService) {
-    this.baseUrl = this.configService.get('ai.baseUrl');
+    this.baseUrl = this.configService.get('ai.baseUrl') || 'http://localhost:8000';
     this.httpClient = axios.create({
       baseURL: this.baseUrl,
       timeout: 30000, // 30 seconds timeout

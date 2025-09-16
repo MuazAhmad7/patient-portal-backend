@@ -2,8 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import * as helmet from 'helmet';
-import * as cors from 'cors';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -14,15 +13,15 @@ async function bootstrap() {
   app.use(helmet());
   
   // CORS configuration
-  app.use(cors({
-    origin: configService.get('security.corsOrigin'),
+  app.enableCors({
+    origin: configService.get('security.corsOrigin') || 'http://localhost:3000',
     credentials: true,
-  }));
+  });
 
-  // Global validation pipe
+  // Global validation pipe - relaxed for debugging
   app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
+    whitelist: false,  // Allow extra properties
+    forbidNonWhitelisted: false,  // Don't throw on extra properties
     transform: true,
   }));
 
@@ -37,6 +36,7 @@ async function bootstrap() {
     .addTag('medical-records', 'Medical records management')
     .addTag('prescriptions', 'Prescription management')
     .addTag('ai-agents', 'AI agent integration')
+    .addTag('insurance', 'Insurance info and AI advice')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

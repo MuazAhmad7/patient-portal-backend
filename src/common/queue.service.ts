@@ -38,7 +38,7 @@ export class QueueService implements OnModuleInit, OnModuleDestroy {
 
   async createQueue(name: string): Promise<Queue> {
     if (this.queues.has(name)) {
-      return this.queues.get(name);
+      return this.queues.get(name)!;
     }
 
     const queue = new Queue(name, {
@@ -75,7 +75,7 @@ export class QueueService implements OnModuleInit, OnModuleDestroy {
     processor: (job: Job) => Promise<any>
   ): Promise<Worker> {
     if (this.workers.has(queueName)) {
-      return this.workers.get(queueName);
+      return this.workers.get(queueName)!;
     }
 
     const worker = new Worker(queueName, processor, {
